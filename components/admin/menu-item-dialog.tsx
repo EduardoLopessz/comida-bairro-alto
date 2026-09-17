@@ -45,7 +45,11 @@ export function MenuItemDialog({
 }: {
   aberto: boolean;
   aoFechar: () => void;
-  /** `null` = criar novo. */
+  /**
+   * `null` = criar novo. O componente é remontado pelo pai (via `key`)
+   * sempre que o alvo muda, então o estado inicial já vem correto — não há
+   * efeito de sincronização aqui.
+   */
   item: MenuItem | null;
   categorias: MenuCategory[];
   categoriaPadrao?: string;
@@ -54,12 +58,6 @@ export function MenuItemDialog({
   const [categoria, setCategoria] = useState(
     item?.categoria_id ?? categoriaPadrao ?? categorias[0]?.id ?? "",
   );
-
-  useEffect(() => {
-    if (aberto) {
-      setCategoria(item?.categoria_id ?? categoriaPadrao ?? categorias[0]?.id ?? "");
-    }
-  }, [aberto, item, categoriaPadrao, categorias]);
 
   useEffect(() => {
     if (estado.ok) {

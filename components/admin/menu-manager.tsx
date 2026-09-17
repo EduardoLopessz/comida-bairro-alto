@@ -40,6 +40,13 @@ import {
   type MenuItem,
 } from "@/types/database";
 
+/** Descarta a lista de pratos, devolvendo só os campos da categoria. */
+function semItens(categoria: MenuCategoryWithItems): MenuCategory {
+  const copia: Partial<MenuCategoryWithItems> = { ...categoria };
+  delete copia.menu_items;
+  return copia as MenuCategory;
+}
+
 type Exclusao =
   | { tipo: "item"; item: MenuItem }
   | { tipo: "categoria"; categoria: MenuCategoryWithItems };
@@ -52,9 +59,9 @@ type Exclusao =
  * colapsar o resto reduz o ruído visual no uso diário.
  */
 export function MenuManager({ menu }: { menu: MenuCategoryWithItems[] }) {
-  const categorias: MenuCategory[] = menu.map(
-    ({ menu_items: _itens, ...c }) => c,
-  );
+  // Só os metadados da categoria — os pratos ficam de fora, o seletor do
+  // diálogo não precisa deles.
+  const categorias: MenuCategory[] = menu.map((c) => semItens(c));
 
   const [abertas, setAbertas] = useState<string[]>(
     menu.slice(0, 2).map((c) => c.id),
@@ -204,9 +211,7 @@ export function MenuManager({ menu }: { menu: MenuCategoryWithItems[] }) {
                       variant="ghost"
                       aria-label={`Editar categoria ${categoria.nome}`}
                       onClick={() =>
-                        setDialogCategoria({
-                          categoria: (({ menu_items: _i, ...c }) => c)(categoria),
-                        })
+                        setDialogCategoria({ categoria: semItens(categoria) })
                       }
                       className="text-ink/50 hover:text-olive size-8"
                     >
@@ -362,6 +367,9 @@ export function MenuManager({ menu }: { menu: MenuCategoryWithItems[] }) {
 
       {/* ------------------------------------------------------------ MODAIS */}
       <MenuItemDialog
+        // Remontar ao trocar de alvo zera o estado interno do formulário
+        // sem precisar de um efeito de sincronização.
+        key={`item-${dialogItem?.item?.id ?? dialogItem?.categoriaId ?? "novo"}`}
         aberto={dialogItem !== null}
         aoFechar={() => setDialogItem(null)}
         item={dialogItem?.item ?? null}
@@ -370,6 +378,7 @@ export function MenuManager({ menu }: { menu: MenuCategoryWithItems[] }) {
       />
 
       <CategoryDialog
+        key={`cat-${dialogCategoria?.categoria?.id ?? "nova"}`}
         aberto={dialogCategoria !== null}
         aoFechar={() => setDialogCategoria(null)}
         categoria={dialogCategoria?.categoria ?? null}

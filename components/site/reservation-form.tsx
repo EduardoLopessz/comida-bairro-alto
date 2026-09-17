@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useId, useRef, useState } from "react";
+import { useActionState, useEffect, useId, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -18,15 +18,14 @@ const ESTADO_INICIAL: ReservationState = { status: "idle" };
 
 export function ReservationForm({ aviso }: { aviso?: string }) {
   const [estado, formAction] = useActionState(criarReserva, ESTADO_INICIAL);
-  const formRef = useRef<HTMLFormElement>(null);
   const [hora, setHora] = useState<string>("");
   const idBase = useId();
   const hoje = todayISO();
 
   useEffect(() => {
+    // No sucesso o formulário é substituído pelo painel de confirmação —
+    // ele desmonta sozinho, sem precisar de reset manual.
     if (estado.status === "sucesso") {
-      formRef.current?.reset();
-      setHora("");
       toast.success("Pedido de reserva enviado", {
         description: estado.mensagem,
       });
@@ -58,7 +57,6 @@ export function ReservationForm({ aviso }: { aviso?: string }) {
 
   return (
     <form
-      ref={formRef}
       action={formAction}
       noValidate
       className="border-ink/12 bg-paper-light border p-6 sm:p-10"

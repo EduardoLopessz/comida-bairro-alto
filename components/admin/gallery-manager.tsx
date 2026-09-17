@@ -178,6 +178,8 @@ export function GalleryManager({ imagens }: { imagens: GalleryImage[] }) {
       )}
 
       <GalleryDialog
+        // Ver nota em menu-manager.tsx: remontar substitui o efeito de sync.
+        key={`img-${dialog?.imagem?.id ?? "nova"}`}
         aberto={dialog !== null}
         aoFechar={() => setDialog(null)}
         imagem={dialog?.imagem ?? null}
@@ -227,10 +229,6 @@ function GalleryDialog({
   const [categoria, setCategoria] = useState<GalleryCategory>(
     imagem?.categoria ?? "ambiente",
   );
-
-  useEffect(() => {
-    if (aberto) setCategoria(imagem?.categoria ?? "ambiente");
-  }, [aberto, imagem]);
 
   useEffect(() => {
     if (estado.ok) {

@@ -1,26 +1,205 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/*
+ * DESIGN SYSTEM — "Herança Contemporânea"
+ * Paleta fixa definida no briefing da marca. Não há tema escuro no site
+ * público: o bege papel é parte da identidade. O bloco .dark existe apenas
+ * para que os componentes shadcn continuem válidos.
+ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-fraunces);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Tokens de marca — usáveis como bg-paper, text-olive, bg-wine… */
+  --color-paper: #ede6da;
+  --color-paper-deep: #e2d9c9;
+  --color-paper-light: #f7f3ea;
+  --color-olive: #3a4b3c;
+  --color-olive-light: #4d6350;
+  --color-wine: #6b2737;
+  --color-wine-light: #85374a;
+  --color-ink: #232323;
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.5rem;
+
+  --background: #ede6da;
+  --foreground: #232323;
+
+  --card: #f7f3ea;
+  --card-foreground: #232323;
+  --popover: #f7f3ea;
+  --popover-foreground: #232323;
+
+  --primary: #3a4b3c;
+  --primary-foreground: #f7f3ea;
+
+  --secondary: #e2d9c9;
+  --secondary-foreground: #3a4b3c;
+
+  --muted: #e2d9c9;
+  --muted-foreground: #5c5a53;
+
+  --accent: #6b2737;
+  --accent-foreground: #f7f3ea;
+
+  --destructive: #a33a2a;
+
+  --border: rgba(35, 35, 35, 0.14);
+  --input: rgba(35, 35, 35, 0.2);
+  --ring: #3a4b3c;
+
+  --chart-1: #3a4b3c;
+  --chart-2: #6b2737;
+  --chart-3: #8a7a5c;
+  --chart-4: #4d6350;
+  --chart-5: #b08968;
+
+  --sidebar: #3a4b3c;
+  --sidebar-foreground: #ede6da;
+  --sidebar-primary: #6b2737;
+  --sidebar-primary-foreground: #f7f3ea;
+  --sidebar-accent: rgba(237, 230, 218, 0.12);
+  --sidebar-accent-foreground: #f7f3ea;
+  --sidebar-border: rgba(237, 230, 218, 0.16);
+  --sidebar-ring: #ede6da;
+}
+
+.dark {
+  --background: #232323;
+  --foreground: #ede6da;
+  --card: #2b2b2b;
+  --card-foreground: #ede6da;
+  --popover: #2b2b2b;
+  --popover-foreground: #ede6da;
+  --primary: #ede6da;
+  --primary-foreground: #232323;
+  --secondary: #343434;
+  --secondary-foreground: #ede6da;
+  --muted: #343434;
+  --muted-foreground: #a8a294;
+  --accent: #85374a;
+  --accent-foreground: #f7f3ea;
+  --destructive: #c0563f;
+  --border: rgba(237, 230, 218, 0.14);
+  --input: rgba(237, 230, 218, 0.2);
+  --ring: #ede6da;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+  }
+
+  ::selection {
+    background-color: #6b2737;
+    color: #f7f3ea;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /*
+   * Textura de papel: ruído sutil gerado por SVG inline (sem asset externo,
+   * sem custo de rede). Aplicado no wrapper do site público.
+   */
+  .paper-texture {
+    position: relative;
+  }
+
+  .paper-texture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  }
+
+  /* Filete decorativo usado entre seções editoriais */
+  .rule-ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: color-mix(in srgb, #232323 45%, transparent);
+  }
+
+  .rule-ornament::before,
+  .rule-ornament::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

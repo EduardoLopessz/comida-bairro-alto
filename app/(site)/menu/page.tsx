@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MenuBrowser } from "@/components/site/menu-browser";
 import { PageHeader } from "@/components/site/page-header";
 import { Reveal } from "@/components/site/motion-primitives";
+import { ViewTracker } from "@/components/site/view-tracker";
 import { Button } from "@/components/ui/button";
 import { getMenu, getSiteContent } from "@/lib/data";
 
@@ -17,9 +18,12 @@ export const metadata: Metadata = {
 
 export default async function MenuPage() {
   const [menu, content] = await Promise.all([getMenu(), getSiteContent()]);
+  const idsVisiveis = menu.flatMap((c) => c.menu_items.map((i) => i.id));
 
   return (
     <>
+      <ViewTracker ids={idsVisiveis} />
+
       <PageHeader
         eyebrow="Cardápio"
         titulo="A carta muda com"
